@@ -1,0 +1,686 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use App\Models\certificate;
+use App\Models\Education;
+use Livewire\Component;
+use App\Models\Employee;
+use App\Models\project_experience;
+use App\Models\work_experience;
+use Illuminate\Support\Facades\Log;
+use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
+
+class ManageEmployees extends Component
+{
+    use WithPagination;
+
+    public $confirmingPageDeletion = false;
+
+    public $modelId=null;
+    /*  基本信息 */
+    public $employee_id;   /* 员工号 */
+    public $name;          /* 姓名 */
+    public $national_id;   /* 身份证 */
+    public $photo;         /* 照片 */
+    public $sex;           /* 性别 */
+    public $birthday;      /* 生日 */
+    public $origin_city;   /* 籍贯 */
+    public $resident_city; /* 户籍 */
+    public $ethnic;         /* 民族 */
+
+    /* 工作信息 */
+    public $department;    /* 部门 */
+    public $role;          /* 岗位 */
+    public $level;         /* 级别 */
+    public $join_date;     /* 加入公司日期 */
+    public $sign_date;     /* 合同日期 */
+    public $sign_type;     /* 合同类型 */
+    public $sign_duration; /* 合同期限 */
+    public $work_date;     /* 参加工作日期 */
+
+    /* 联系信息 */
+    public $phone;               /* 联系电话 */
+    public $address;             /* 联系地址 */
+    public $emergency_person;    /* 紧急联系人 */
+    public $emergency_phone;     /* 紧急联系电话 */
+    public $email;               /* 邮箱 */
+
+    /* 帐户信息 */
+    public $bank;         /* 开户银行 */
+    public $account;      /* 工资帐号 */
+    public $si_city;      /* 社保城市 */
+    public $si_account;   /* 社保帐号 */
+    public $pf_account;   /* 公积金帐号 */
+
+    public $usid;
+
+
+    /* 教育信息 */
+    public $educations;   /* 从数据库中读出的教育信息 */
+    public $edu_start_date;
+    public $edu_end_date;
+    public $edu_school;
+    public $edu_degree;
+
+    /* 工作经验 */
+    public $works;
+    public $wrk_start_date;
+    public $wrk_end_date;
+    public $wrk_company;
+    public $wrk_department;
+    public $wrk_title;
+
+    /* 项目经验 */
+    public $projects;
+    public $prj_start_date;
+    public $prj_end_date;
+    public $prj_project;
+    public $prj_role;
+
+    /* 认证 */
+    public $certificates;
+    public $cer_name;
+    public $cer_date;
+    public $cer_source;
+
+    public $isDelete=false;
+
+    /**
+     * 这是做输入校验规责的.
+     *
+     *  @return [rules]
+     */
+    public function rules() {
+       return [
+        'name'=> 'required',
+        'employee_id'=> 'required',
+        'national_id'=> ['required','min:18','max:18',Rule::unique('employees','national_id')->ignore($this->modelId)],
+        'birthday' => 'required|date',
+        'ethnic' => 'required',
+        'sex'   => 'required',
+        'email' => 'email',
+        'origin_city' => 'required',
+        'resident_city' => 'required',
+        'department'=> 'required',
+        'role'=> 'required',
+        'level'=> 'required',
+        'join_date' => 'required|date',
+        'sign_date' => 'required|date',
+        'sign_type'=> 'required',
+        'sign_duration'=> 'required',
+        'work_date' => 'required|date',
+       ];
+    }
+
+    /**
+     * 从数据库重读取纪录.
+     *
+     *  @return Employees
+     */
+    public function read(){
+        return Employee::paginate(5);
+    }
+
+    /**
+     * 重设所有变量.
+     *
+     *  @return void
+     */
+    public function resetVars(){
+        /*  基本信息 */
+        $this->employee_id=null;   /* 员工号 */
+        $this->name=null;          /* 姓名 */
+        $this->national_id=null;   /* 身份证 */
+        $this->photo=null;         /* 照片 */
+        $this->sex='M';           /* 性别 */
+        $this->birthday=null;      /* 生日 */
+        $this->origin_city=null;   /* 籍贯 */
+        $this->resident_city=null; /* 户籍 */
+        $this->ethnic=null;         /* 民族 */
+
+        /* 工作信息 */
+        $this->department='management';    /* 部门 */
+        $this->role='worker';          /* 岗位 */
+        $this->level=null;         /* 级别 */
+        $this->join_date=null;     /* 加入公司日期 */
+        $this->sign_date=null;     /* 合同日期 */
+        $this->sign_type=null;     /* 合同类型 */
+        $this->sign_duration=null; /* 合同期限 */
+        $this->work_date=null;     /* 参加工作日期 */
+
+        /* 联系信息 */
+        $this->phone=null;               /* 联系电话 */
+        $this->address=null;             /* 联系地址 */
+        $this->emergency_person=null;    /* 紧急联系人 */
+        $this->emergency_phone=null;     /* 紧急联系电话 */
+        $this->email=null;               /* 邮箱 */
+
+        /* 帐户信息 */
+        $this->bank=null;         /* 开户银行 */
+        $this->account=null;      /* 工资帐号 */
+        $this->si_city=null;      /* 社保城市 */
+        $this->si_account=null;   /* 社保帐号 */
+        $this->pf_account=null;   /* 公积金帐号 */
+        $this->modelId=null;
+
+        $this->isDelete = false;
+
+        $this->educations = null;
+        $this->edu_start_date = null;
+        $this->edu_end_date = null;
+        $this->edu_school = null;
+        $this->edu_degree = 'highschool';
+
+        $this->works = null;
+        $this->wrk_start_date = null;
+        $this->wrk_end_date = null;
+        $this->wrk_department = null;
+        $this->wrk_company = null;
+        $this->wrk_title = null;
+
+        $this->projects = null;
+        $this->prj_start_date = null;
+        $this->prj_end_date = null;
+        $this->prj_project = null;
+        $this->prj_role = null;
+
+        $this->certificates = null;
+        $this->cer_name = null;
+        $this->cer_date = null;
+        $this->cer_source = null;
+
+    }
+
+    /**
+     * Map the data to model page
+     *
+     *  @return void
+     */
+    public function EmployeeData() {
+        return [
+        'employee_id'=> $this->employee_id,
+        'name'=> $this->name,
+        'national_id'=> $this->national_id,
+        'department'=> $this->department,
+        'role'=> $this->role,
+        'level'=> $this->level,
+        'sex'=> $this->sex,
+        'phone'=> $this->phone,
+        'email'=> $this->email,
+        'birthday'=> $this->birthday,
+        'join_date'=> $this->join_date,
+        'work_date'=> $this->work_date,
+        'sign_date'=> $this->sign_date,
+        'sign_type'=> $this->sign_type,
+        'sign_duration'=> $this->sign_duration,
+        'photo'=> $this->photo,
+        'emergency_person'=> $this->emergency_person,
+        'emergency_phone'=> $this->emergency_phone,
+        'bank'=> $this->bank,
+        'account'=> $this->account,
+        'si_city'=> $this->si_city,
+        'si_account'=> $this->si_account,
+        'pf_account'=> $this->pf_account,
+        'origin_city'=> $this->origin_city,
+        'resident_city'=> $this->resident_city,
+        'ethnic'=> $this->ethnic,
+        'address'=> $this->address,
+        'usid'=> $this->usid,
+        ];
+    }
+
+    /**
+     * Create a page record into database.
+     *
+     *  @return void
+     */
+    public function save()
+    {
+        $this->validate($this->rules());
+        if ($this->modelId)
+           Employee::find($this->modelId)->update($this->EmployeeData());
+        else
+            Employee::create($this->EmployeeData());
+
+        $this->saveEducations();
+        $this->saveWork();
+        $this->saveProject();
+        $this->saveCert();
+
+        $this->resetVars();
+    }
+
+    public function mount(){
+        $this->resetVars();
+    }
+
+    public function deleteShowModal() {
+        if ($this->modelId)
+            $this->confirmingPageDeletion = true;
+    }
+
+    public function delete() {
+        Employee::find($this->modelId)->delete();
+        Education::where('national_id',$this->national_id)->delete();
+
+        $this->confirmingPageDeletion = false;
+        $this->resetVars();
+        $this->resetPage();
+    }
+
+    /**
+     * 新建一条数据库纪录。
+     *
+     *  @return void
+     */
+    public function createShowModal(){
+        $this->resetVars();
+        $this->modalFormVisible = true;
+    }
+
+    /**
+     * 调用窗口update数据.
+     *
+     *  @return void
+     */
+    public function updateShowModal($id) {
+       $this->modelId = $id;
+       $this->loadModel();
+       $this->isDelete = true;
+    }
+
+    private function loadModel() {
+        Log::debug('modelId '.$this->modelId);
+        $data = Employee::find($this->modelId);
+        $this->employee_id=$data->employee_id;
+        $this->name=$data->name;
+        $this->national_id=$data->national_id;
+        $this->department=$data->department;
+        $this->photo=$data->photo;
+        $this->role=$data->role;
+        $this->level=$data->level;
+        $this->phone=$data->phone;
+        $this->email=$data->email;
+        $this->sex=$data->sex;
+        $this->birthday=$data->birthday;
+        $this->join_date=$data->join_date;
+        $this->work_date=$data->work_date;
+        $this->emergency_person=$data->emergency_person;
+        $this->emergency_phone=$data->emergency_phone;
+        $this->bank = $data->bank;
+        $this->account=$data->account;
+        $this->si_city=$data->si_city;
+        $this->si_account=$data->si_account;
+        $this->pf_account=$data->pf_account;
+        $this->origin_city=$data->origin_city;
+        $this->resident_city=$data->resident_city;
+        $this->ethnic=$data->ethnic;
+        $this->address=$data->address;
+        $this->usid=$data->usid;
+        $this->sign_date=$data->sign_date;
+        $this->sign_type=$data->sign_type;
+        $this->sign_duration=$data->sign_duration;
+
+        $this->loadEducations($this->national_id);
+        $this->loadWorks($this->national_id);
+        $this->loadProject($this->national_id);
+        $this->loadCert($this->national_id);
+    }
+
+    /**
+     * 从教育信息表中，以身份证号为索引，调出个人教育信息.
+     *
+     *  @return void
+     */
+    public function loadEducations($national_id)
+    {
+        $edu_data = Education::where('national_id',$national_id)->get();
+
+        $this->educations = null;
+
+        foreach ($edu_data as $item){
+            $this->add_edu($item->id,
+                           $item->start_date,
+                           $item->end_date,
+                           $item->school,
+                           $item->degree,
+                           1
+            );
+        }
+
+    }
+
+    public function add_edu($id,$start_date,$end_date,$school,$degree,$flag){
+        if ($this->educations == null)
+            $this->educations = collect();
+
+            $this->educations->push([
+                'id' => $id,
+                'start_date' => $start_date,
+                'end_date'  => $end_date,
+                'school'    => $school,
+                'degree'    => $degree,
+                'flag'      => $flag,
+            ]);
+
+    }
+
+    public function addEducation(){
+
+        $this->add_edu(0,
+                       $this->edu_start_date,
+                       $this->edu_end_date,
+                       $this->edu_school,
+                       $this->edu_degree,
+                       1
+        );
+        $this->edu_degree = 'highschool';
+        $this->edu_start_date = null;
+        $this->edu_end_date = null;
+        $this->edu_school = null;
+
+    }
+
+    public function delEducation($key){
+        $item = $this->educations->get($key);
+        $this->educations->forget($key);
+
+        $this->add_edu($item['id'],
+                       $item['start_date'],
+                       $item['end_date'],
+                       $item['school'],
+                       $item['degree'],
+                       2,
+        );
+
+    }
+
+    public function saveEducations(){
+        if ($this->educa)
+        foreach ($this->educations as $item)
+        {
+            if ($item['id'] == 0 and $item['flag'] == 1)
+            {
+                   Education::create([
+                        'national_id' => $this->national_id,
+                        'start_date'  => $item['start_date'],
+                        'end_date'    => $item['end_date'],
+                        'school'      => $item['school'],
+                        'degree'      => $item['degree']
+                    ]);
+            }else
+            if ($item['id'] != 0 and $item['flag'] == 2)
+                Education::find($item['id'])->delete();
+        }
+    }
+
+    /**
+     * 从教育信息表中，以身份证号为索引，调出个人教育信息.
+     *
+     *  @return void
+     */
+    public function loadWorks($national_id)
+    {
+        $data = work_experience::where('national_id',$national_id)->get();
+
+        $this->works = null;
+
+        foreach ($data as $item){
+            $this->add_work($item->id,
+                           $item->start_date,
+                           $item->end_date,
+                           $item->company,
+                           $item->department,
+                           $item->title,
+                           1
+            );
+        }
+
+    }
+
+    public function add_work($id,$start_date,$end_date,$company,$department,$title,$flag){
+        if ($this->works == null)
+            $this->works = collect();
+
+            $this->works->push([
+                'id' => $id,
+                'start_date' => $start_date,
+                'end_date'  => $end_date,
+                'company'    => $company,
+                'department'    => $department,
+                'title'    => $title,
+                'flag'      => $flag,
+            ]);
+
+    }
+
+    public function addWork(){
+
+        $this->add_work(0,
+                       $this->wrk_start_date,
+                       $this->wrk_end_date,
+                       $this->wrk_company,
+                       $this->wrk_department,
+                       $this->wrk_title,
+                       1
+        );
+        $this->wrk_start_date = null;
+        $this->wrk_end_date = null;
+        $this->wrk_company = null;
+        $this->wrk_department = null;
+        $this->wrk_title = null;
+
+    }
+
+    public function delWork($key){
+        $item = $this->works->get($key);
+        $this->works->forget($key);
+
+        $this->add_work($item['id'],
+                       $item['start_date'],
+                       $item['end_date'],
+                       $item['company'],
+                       $item['department'],
+                       $item['title'],
+                       2,
+        );
+
+    }
+
+    public function saveWork(){
+        if ($this->works)
+        foreach ($this->works as $item)
+        {
+            if ($item['id'] == 0 and $item['flag'] == 1)
+            {
+                   work_experience::create([
+                        'national_id' => $this->national_id,
+                        'start_date'  => $item['start_date'],
+                        'end_date'    => $item['end_date'],
+                        'company'      => $item['company'],
+                        'department'      => $item['department'],
+                        'title'      => $item['title']
+                    ]);
+            }else
+            if ($item['id'] != 0 and $item['flag'] == 2)
+                work_experience::find($item['id'])->delete();
+        }
+    }
+
+    /**
+     * 从教育信息表中，以身份证号为索引，调出个人教育信息.
+     *
+     *  @return void
+     */
+    public function loadProject($national_id)
+    {
+        $data = project_experience::where('national_id',$national_id)->get();
+
+        $this->projects = null;
+
+        foreach ($data as $item){
+            $this->add_project($item->id,
+                           $item->start_date,
+                           $item->end_date,
+                           $item->project,
+                           $item->role,
+                           1
+            );
+        }
+
+    }
+
+    public function add_project($id,$start_date,$end_date,$project,$role,$flag){
+        if ($this->projects == null)
+            $this->projects = collect();
+
+            $this->projects->push([
+                'id' => $id,
+                'start_date' => $start_date,
+                'end_date'  => $end_date,
+                'project'    => $project,
+                'role'    => $role,
+                'flag'      => $flag,
+            ]);
+
+    }
+
+    public function addProject(){
+
+        $this->add_project(0,
+                       $this->prj_start_date,
+                       $this->prj_end_date,
+                       $this->prj_project,
+                       $this->prj_role,
+                       1
+        );
+        $this->prj_start_date = null;
+        $this->prj_end_date = null;
+        $this->prj_project = null;
+        $this->prj_role = null;
+
+    }
+
+    public function delProject($key){
+        $item = $this->projects->get($key);
+        $this->projects->forget($key);
+
+        $this->add_project($item['id'],
+                       $item['start_date'],
+                       $item['end_date'],
+                       $item['project'],
+                       $item['role'],
+                       2,
+        );
+
+    }
+
+    public function saveProject(){
+        if ($this->projects)
+        foreach ($this->projects as $item)
+        {
+            if ($item['id'] == 0 and $item['flag'] == 1)
+            {
+                   project_experience::create([
+                        'national_id' => $this->national_id,
+                        'start_date'  => $item['start_date'],
+                        'end_date'    => $item['end_date'],
+                        'project'      => $item['project'],
+                        'role'      => $item['role']
+                    ]);
+            }else
+            if ($item['id'] != 0 and $item['flag'] == 2)
+                project_experience::find($item['id'])->delete();
+        }
+    }
+
+    /**
+     * 从教育信息表中，以身份证号为索引，调出个人教育信息.
+     *
+     *  @return void
+     */
+    public function loadCert($national_id)
+    {
+        $data = certificate::where('national_id',$national_id)->get();
+
+        $this->certificates = null;
+
+        foreach ($data as $item){
+            $this->add_cert($item->id,
+                           $item->cer_name,
+                           $item->cer_date,
+                           $item->source,
+                           1
+            );
+        }
+
+    }
+
+    public function add_cert($id,$cer_name,$cer_date,$cer_source,$flag){
+        if ($this->certificates == null)
+            $this->certificates = collect();
+
+            $this->certificates->push([
+                'id' => $id,
+                'cer_name' => $cer_name,
+                'cer_date'  => $cer_date,
+                'cer_source'    => $cer_source,
+                'flag'      => $flag,
+            ]);
+
+    }
+
+    public function addCert(){
+
+        $this->add_cert(0,
+                       $this->cer_name,
+                       $this->cer_date,
+                       $this->cer_source,
+                       1
+        );
+        $this->cer_name = null;
+        $this->cer_date = null;
+        $this->cer_source = null;
+
+    }
+
+    public function delCert($key){
+        $item = $this->certificates->get($key);
+        $this->certificates->forget($key);
+
+        $this->add_cert($item['id'],
+                       $item['cer_name'],
+                       $item['cer_date'],
+                       $item['cer_source'],
+                       2,
+        );
+
+    }
+
+    public function saveCert(){
+        if ($this->certificates)
+        foreach ($this->certificates as $item)
+        {
+            if ($item['id'] == 0 and $item['flag'] == 1)
+            {
+                   certificate::create([
+                        'national_id' => $this->national_id,
+                        'cer_name'  => $item['cer_name'],
+                        'cer_date'    => $item['cer_date'],
+                        'source'      => $item['cer_source'],
+                    ]);
+            }else
+            if ($item['id'] != 0 and $item['flag'] == 2)
+                certificate::find($item['id'])->delete();
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.manage-employees',[
+            'data' => $this->read(),
+            ]);
+    }
+}
