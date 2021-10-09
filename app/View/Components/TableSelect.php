@@ -2,9 +2,9 @@
 
 namespace App\View\Components;
 
-use App\View\Components\LabelInput;
+use App\View\Components\EditBase;
 
-class TableSelect extends LabelInput
+class TableSelect extends EditBase
 {
     public $item;
     public $columns;

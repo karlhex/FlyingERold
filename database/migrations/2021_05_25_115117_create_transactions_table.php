@@ -15,14 +15,15 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->morphs('tranable');
             $table->date('tran_date');
             $table->string('tran_code',10);
             $table->enum('drcr',['Dr','Cr']);
-            $table->unsignedBigInteger('sqno');
+            $table->string('sid')->unique();
             $table->foreignId('dr_account');
             $table->foreignId('cr_account');
             $table->decimal('amount',15,2);
-            $table->string('usid');
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }

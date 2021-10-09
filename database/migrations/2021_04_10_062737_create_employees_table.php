@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateEmployeesTable extends Migration
@@ -73,12 +74,43 @@ class CreateEmployeesTable extends Migration
             $table->string('si_city')->nullable();
             $table->string('si_account')->nullable();
             $table->string('pf_account')->nullable();
-            $table->string('usid')->nullable();
+            $table->string('user_id')->nullable();
 
-            $table->string('file_sid');
             $table->timestamps();
             $table->softDeletes();
         });
+
+
+        DB::table('select_options')->insert([
+            ['key' => 'sex','option' => 'M','value'=>'男性'],
+            ['key' => 'sex','option' => 'F','value'=>'女性'],
+        ]);
+
+        DB::table('select_options')->insert([
+            ['key' => 'signtype','option' => 'LT','value'=>'长期合同'],
+            ['key' => 'signtype','option' => 'ST','value'=>'短期合同'],
+        ]);
+
+        DB::table('select_options')->insert([
+            ['key' => 'department','option' => 'HO','value'=>'总经理办公室'],
+            ['key' => 'department','option' => 'HRD','value'=>'人力资源部'],
+            ['key' => 'department','option' => 'GAD','value'=>'总务部'],
+            ['key' => 'department','option' => 'SD','value'=>'销售部'],
+            ['key' => 'department','option' => 'RND','value'=>'产品研发部'],
+            ['key' => 'department','option' => 'PD','value'=>'采购部'],
+            ['key' => 'department','option' => 'ED','value'=>'工程部'],
+            ['key' => 'department','option' => 'FD','value'=>'财务部'],
+        ]);
+
+        DB::table('select_options')->insert([
+            ['key' => 'role','option' => 'GM','value'=>'总经理'],
+            ['key' => 'role','option' => 'VP','value'=>'副总经理'],
+            ['key' => 'role','option' => 'DM','value'=>'部门经理'],
+            ['key' => 'role','option' => 'PM','value'=>'项目经理'],
+            ['key' => 'role','option' => 'AM','value'=>'客户经理'],
+            ['key' => 'role','option' => 'SALES','value'=>'销售'],
+            ['key' => 'role','option' => 'OPR','value'=>'文员'],
+        ]);
     }
 
     /**
@@ -89,5 +121,9 @@ class CreateEmployeesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('employees');
+        DB::table('select_options')->where('key','sex')->delete();
+        DB::table('select_options')->where('key','department')->delete();
+        DB::table('select_options')->where('key','signtype')->delete();
+        DB::table('select_options')->where('key','role')->delete();
     }
 }

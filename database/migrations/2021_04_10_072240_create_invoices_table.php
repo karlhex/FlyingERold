@@ -21,7 +21,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sop_id');
+            $table->morphs('invoicable');
             $table->unsignedTinyInteger('sequence');
             $table->string("invoice_no");
             $table->foreignId('dr_tax_info_id');

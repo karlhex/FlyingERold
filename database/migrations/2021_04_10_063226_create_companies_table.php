@@ -31,7 +31,7 @@ class CreateCompaniesTable extends Migration
             $table->string('email')->nullable();
             $table->foreignId('business_person')->nullable();
             $table->foreignId('tech_person')->nullable();
-            $table->foreignId('account_id');
+            $table->foreignId('account_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

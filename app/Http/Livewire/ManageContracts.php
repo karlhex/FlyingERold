@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Contract;
+use App\Traits\WithEditSessions;
 use Livewire\Component;
 use App\Traits\WithListItem;
 use Illuminate\Support\Facades\Log;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class ManageContracts extends Component
 {
     use WithListItem;
+    use WithEditSessions;
 
     public $filter=[
         'amount_low' => 0,
@@ -18,6 +20,8 @@ class ManageContracts extends Component
         'end_date'    => null,
         'type'        => 'sales',
     ];
+
+    public $enableFilter = false;
 
     public function mount()
     {
@@ -35,18 +39,21 @@ class ManageContracts extends Component
 
         $this->filter['start_date'] = date('Y-m-d',strtotime('-1 years'));
         $this->filter['end_date'] = date('Y-m-d');
+        $this->pushSessionPath('manage-contracts',__("ManageContracts"),route('frame',[ 'frame' =>'manage-contracts']) ,true);
     }
 
     public function readItems()
     {
-        Log::debug("in ManageContracts readItems");
-        return $this->DBMODEL::filter($this->li_filters)
-                    ->where('amount', '>=' ,$this->filter['amount_low'])
+        $obj =  $this->DBMODEL::filter($this->li_filters);
+
+        if ($this->enableFilter)
+            $obj = $obj->where('amount', '>=' ,$this->filter['amount_low'])
                     ->where('amount', '<=' ,$this->filter['amount_high'])
                     ->where('sign_date', '>=' ,$this->filter['start_date'])
                     ->where('sign_date', '<=' ,$this->filter['end_date'])
-                    ->where('type', $this->filter['type'])
-                    ->paginate($this->linesPerPage);
+                    ->where('type', $this->filter['type']);
+
+        return $obj->paginate($this->linesPerPage);
     }
 
     public function render()

@@ -4,9 +4,9 @@
                   :items="$data">
 
     <x-slot name='input'>
-        <x-label-input name="option.key" label='{{__("Option.Key")}}' class="mt-2 w-full" wire:model.defer='li_record.key' />
-        <x-label-input name="option.option" label='{{__("Option.Option")}}' class="mt-2 w-full" wire:model.defer='li_record.option' />
-        <x-label-input name="option.value" label='{{__("Option.Value")}}' class="mt-2 w-full" wire:model.defer='li_record.value' />
+        <x-label-input name="li_record.key" label='{{__("Option.Key")}}' class="mt-2 w-full" wire:model.defer='li_record.key' />
+        <x-label-input name="li_record.option" label='{{__("Option.Option")}}' class="mt-2 w-full" wire:model.defer='li_record.option' />
+        <x-label-input name="li_record.value" label='{{__("Option.Value")}}' class="mt-2 w-full" wire:model.defer='li_record.value' />
     </x-slot>
 
     <x-slot name="message">

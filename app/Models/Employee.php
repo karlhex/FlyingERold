@@ -8,13 +8,18 @@ use App\Models\work_experience;
 use App\Models\project_experience;
 use App\Models\Education;
 use App\Models\certificate;
+use App\Traits\FilesMorphs;
+use App\Traits\WithSelectOption;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends FilterModel
 {
     use HasFactory;
+    use SoftDeletes;
+    use FilesMorphs;
+    use WithSelectOption;
 
     protected $guarded = ['id'];
-
 
     public function work_experience()
     {
@@ -34,5 +39,10 @@ class Employee extends FilterModel
     public function certificate()
     {
         return $this->hasMany(certificate::class);
+    }
+
+    public function getDepartmentNameAttribute()
+    {
+        return $this->getSelectOptionValue('department',$this->department);
     }
 }

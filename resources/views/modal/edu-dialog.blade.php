@@ -5,10 +5,10 @@
         </x-slot>
 
         <x-slot name="content">
-            <x-date-picker name="education.start_date" label='{{__("education.StartDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.start_date' />
-            <x-date-picker name="education.end_date" label='{{__("education.EndDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.end_date' />
-            <x-label-input name="education.school" label='{{__("education.school")}}' class="mt-2 w-full" wire:model.defer='cur_record.school' />
-            <x-label-input name="education.degree" label='{{__("education.degree")}}' class="mt-2 w-full" wire:model.defer='cur_record.degree' />
+            <x-date-picker name="cur_record.start_date" label='{{__("education.StartDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.start_date' />
+            <x-date-picker name="cur_record.end_date" label='{{__("education.EndDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.end_date' />
+            <x-label-input name="cur_record.school" label='{{__("education.school")}}' class="mt-2 w-full" wire:model.defer='cur_record.school' />
+            <x-label-input name="cur_record.degree" label='{{__("education.degree")}}' class="mt-2 w-full" wire:model.defer='cur_record.degree' />
         </x-slot>
 
         <x-slot name="footer">

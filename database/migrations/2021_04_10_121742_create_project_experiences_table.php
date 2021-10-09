@@ -21,6 +21,7 @@ class CreateProjectExperiencesTable extends Migration
     {
         Schema::create('project_experiences', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employee_id');
             $table->unsignedTinyInteger('sequence');
             $table->date('start_date');
             $table->date('end_date');

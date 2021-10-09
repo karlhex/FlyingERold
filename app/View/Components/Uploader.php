@@ -2,10 +2,11 @@
 
 namespace App\View\Components;
 
-use App\View\Components\LabelInput;
+use App\View\Components\EditBase;
+
 use Illuminate\Support\Facades\Log;
 
-class Uploader extends LabelInput
+class Uploader extends EditBase
 {
 
     /**

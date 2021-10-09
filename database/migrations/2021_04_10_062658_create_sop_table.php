@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateSopTable extends Migration
@@ -26,6 +27,11 @@ class CreateSopTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('select_options')->insert([
+            ['key' => 'drcr','option' => 'Dr','value'=>'借方'],
+            ['key' => 'drcr','option' => 'Cr','value'=>'贷方'],
+        ]);
     }
 
     /**
@@ -36,5 +42,6 @@ class CreateSopTable extends Migration
     public function down()
     {
         Schema::dropIfExists('schedule_of_payment');
+        DB::table('select_options')->where('key','drcr')->delete();
     }
 }

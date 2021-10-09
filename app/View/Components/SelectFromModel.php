@@ -3,26 +3,23 @@
 namespace App\View\Components;
 
 use App\Models\SelectOption;
-use App\View\Components\LabelInput;
+use App\View\Components\SelectBase;
 use Illuminate\Support\Facades\Log;
 
-class SelectFromModel extends LabelInput
+class SelectFromModel extends SelectBase
 {
 
     public $key;
-    public $options;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$label=null,$key)
+    public function __construct($name,$label=null,$caption=null,$key)
     {
-        Log::debug("in SelectFromModel");
-        parent::__construct($name,$label);
         $this->key = $key;
-        $this->options = SelectOption::where('key',$key)->get();
+        $options = SelectOption::where('key',$key)->get()->toArray();
+        parent::__construct($name,$label,$caption,$options);
     }
 
     /**

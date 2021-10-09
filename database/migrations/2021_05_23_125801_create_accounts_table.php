@@ -18,6 +18,8 @@ class CreateAccountsTable extends Migration
             $table->string('name');
             $table->string('account');
             $table->string('bank');
+            $table->decimal('balance',15,2);
+            $table->foreignId('currency_id');
             $table->timestamps();
             $table->softDeletes();
         });

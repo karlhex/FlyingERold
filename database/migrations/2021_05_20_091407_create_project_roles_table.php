@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProjectRolesTable extends Migration
@@ -22,6 +23,13 @@ class CreateProjectRolesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('select_options')->insert([
+            ['key' => 'prrole','option' => 'sales','value'=>'销售'],
+            ['key' => 'prrole','option' => 'PM','value'=>'项目经理'],
+            ['key' => 'prrole','option' => 'engineer','value'=>'工程师'],
+            ['key' => 'prrole','option' => 'accuntant','value'=>'会计'],
+        ]);
     }
 
     /**
@@ -32,5 +40,6 @@ class CreateProjectRolesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('project_roles');
+        DB::table('select_options')->where('key','prrole')->delete();
     }
 }

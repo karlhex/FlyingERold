@@ -13,23 +13,17 @@ class SelectCompany extends SelectBase
      *
      * @return void
      */
-    public function __construct($name, $label=null,$captions=null)
+    public function __construct($name, $label=null,$caption=null)
     {
         Log::debug('in select person');
         $company = $this->loadCompany();
-        parent::__construct($name,$label,$captions,$company);
+        parent::__construct($name,$label,$caption,$company);
     }
 
     protected function loadCompany(){
         $data = Company::all();
-        $company = null;
 
-        $data = $data->fresh();
-
-        foreach ($data as $item)
-            $company[$item['id']] = $item['name'];
-
-        return $company;
+        return $data;
     }
 
     /**
@@ -39,6 +33,6 @@ class SelectCompany extends SelectBase
      */
     public function render()
     {
-        return view('components.select-base');
+        return view('components.select-company');
     }
 }

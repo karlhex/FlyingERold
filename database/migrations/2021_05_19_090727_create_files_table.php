@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateFilesTable extends Migration
@@ -15,7 +16,7 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('file_sid');
+            $table->morphs('fileable');
             $table->unsignedTinyInteger('sequence');
             $table->string('name');
             $table->string('origin_name');
@@ -24,6 +25,12 @@ class CreateFilesTable extends Migration
             $table->binary('thumbnail')->nullable();
             $table->timestamps();
         });
+
+        DB::table('select_options')->insert([
+            ['key' => 'filetype','option' => 'image','value'=>'图片'],
+            ['key' => 'filetype','option' => 'doc','value'=>'文档'],
+            ['key' => 'filetype','option' => 'zip','value'=>'压缩包'],
+        ]);
     }
 
     /**
@@ -34,5 +41,6 @@ class CreateFilesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('files');
+        DB::table('select_options')->where('key','filetype')->delete();
     }
 }

@@ -5,12 +5,12 @@
         </x-slot>
 
         <x-slot name="content">
-            <x-label-input name="sop.instruction" label='{{__("sop.instruction")}}' class="mt-2 w-full" wire:model.defer='cur_record.instruction' />
-            <x-select-from-model name="sop.drcr" label='{{ __("sop.drcr") }}' key="drcr" class="mt-2 w-full" wire:model.defer='cur_record.drcr' />
-            <x-label-input name="sop.amount" label='{{__("sop.amount")}}' class="mt-2 w-full" wire:model.defer='cur_record.amount' />
-            <x-date-picker name="sop.scheduledate" label='{{__("Contract.scheduledate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.schedule_date' />
-            <x-date-picker name="sop.trandate" label='{{__("Contract.trandate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.tran_date' />
-            <x-label-input name="sop.memo" label='{{__("sop.memo")}}' class="mt-2 w-full" wire:model.defer='cur_record.memo' />
+            <x-label-input name="cur_record.instruction" label='{{__("sop.instruction")}}' class="mt-2 w-full" wire:model.defer='cur_record.instruction' />
+            <x-select-from-model name="cur_record.drcr" label='{{ __("sop.drcr") }}' key="drcr" class="w-full" wire:model.defer='cur_record.drcr' />
+            <x-label-input name="cur_record.amount" label='{{__("sop.amount")}}' class="mt-2 w-full" wire:model.defer='cur_record.amount' />
+            <x-date-picker name="cur_record.schedule_date" label='{{__("Contract.scheduledate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.schedule_date' />
+            <x-date-picker name="cur_record.tran_date" label='{{__("Contract.trandate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.tran_date' />
+            <x-label-input name="cur_record.memo" label='{{__("sop.memo")}}' class="mt-2 w-full" wire:model.defer='cur_record.memo' />
         </x-slot>
 
         <x-slot name="footer">

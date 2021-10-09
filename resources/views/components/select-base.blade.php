@@ -1,27 +1,29 @@
-<div>
+@props(['label','name'])
 
-    @if ($label)
-        <x-jet-label for="{{$name}}" value="{{ $label }}" />
-    @endif
+<x-edit-base name="{{$name}}"
+             label="{{$label}}"
+             {{ $attributes  }}
+>
 
-    <div wire:ignore>
+    <div class='w-full' wire:ignore>
         <select
-            {{ $attributes->merge(['class' => 'form-control select2 rounded' ]) }}
+            {{  $attributes->merge(["class" => "form-control $select2 my-2 px-3 py-1 border rounded text-xs text-gray-700 focus:outline-none" ]) }}
             {{ $attributes->whereStartsWith('wire:model') }}
-            id='{{$name}}'
+            style="width: 100%"
+            id="{{ $name }}"
         >
-            <option value="">Choose Person</option>
-            @if ($options)
-            @foreach($options as $key => $data)
-                <option value="{{ $key }}">{{ $data }}</option>
-            @endforeach
+            @if ($select2)
+            <option value="">{{ $caption }}</option>
             @endif
+
+                {{ $slot }}
+
         </select>
     </div>
+</x-edit-base>
 
-</div>
-
-@push('scripts')
+@once
+    @push('scripts')
     <script>
         $(document).ready(function() {
             $('.select2').select2({
@@ -35,4 +37,5 @@
             });
         });
     </script>
-@endpush
+    @endpush
+@endonce

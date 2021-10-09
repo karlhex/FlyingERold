@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\FilterModel;
 use App\Models\Company;
+use App\Traits\FilesMorphs;
 
 class Contract extends FilterModel
 {
     use HasFactory;
     use SoftDeletes;
+    use FilesMorphs;
 
     /**
      *  Mass Assignment.

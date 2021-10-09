@@ -2,12 +2,13 @@
 
 namespace App\View\Components;
 
-use App\View\Components\LabelInput;
+use App\View\Components\Editbase;
 
-class SelectBase extends LabelInput
+class SelectBase extends EditBase
 {
     public $options;
     public $caption;
+    public $select2;
     /**
      * Create a new component instance.
      * @param name  名字，必须输入
@@ -17,11 +18,15 @@ class SelectBase extends LabelInput
      *
      * @return void
      */
-    public function __construct($name,$label=null,$caption=null, $options = null)
+    public function __construct($name,$label=null,$caption, $options = null,$select2=null)
     {
         parent::__construct($name,$label);
         $this->setOptions($options);
         $this->caption = $caption;
+        if ($select2)
+            $this->select2 = 'select2';
+        else
+            $this->select2 = '';
     }
 
     /**
@@ -32,7 +37,6 @@ class SelectBase extends LabelInput
      */
     public function setOptions($options)
     {
-        if (is_array($options))
             $this->options = $options;
     }
 

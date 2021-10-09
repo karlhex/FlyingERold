@@ -24,6 +24,9 @@ class PersonFactory extends Factory
      */
     public function definition()
     {
+        $as = ['GM','VM','DM','PM'];
+        $dm = ['信息技术部','商务部','采购部'];
+
         return [
             'name' => $this->faker->name(),
             'phone1' => $this->faker->phoneNumber,
@@ -31,8 +34,8 @@ class PersonFactory extends Factory
             'phone3' => $this->faker->phoneNumber,
             'email'  => $this->faker->email,
             'company_name' => $this->faker->company,
-            'department' => $this->faker->companySuffix,
-            'title' => $this->faker->title,
+            'department' => $dm[$this->faker->numberBetween(0,2)],
+            'position' => $as[$this->faker->numberBetween(0,3)],
         ];
     }
 }

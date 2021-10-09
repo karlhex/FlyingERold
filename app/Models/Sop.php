@@ -19,7 +19,7 @@ class sop extends Model
        'amount' => 'decimal:2'
     ];
 
-    public function getDrcr()
+    public function getDrcrNameAttribute()
     {
         if ($this->drcr == 'Dr')
             return '付款';

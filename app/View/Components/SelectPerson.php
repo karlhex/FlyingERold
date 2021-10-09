@@ -13,23 +13,17 @@ class SelectPerson extends SelectBase
      *
      * @return void
      */
-    public function __construct($name, $label=null,$captions=null)
+    public function __construct($name, $label=null,$caption=null)
     {
         Log::debug('in select person');
         $people = $this->loadPeople();
-        parent::__construct($name,$label,$captions,$people);
+        parent::__construct($name,$label,$caption,$people);
     }
 
     protected function loadPeople(){
         $data = Person::all();
-        $people = null;
 
-        $data = $data->fresh();
-
-        foreach ($data as $item)
-            $people[$item['id']] = $item['name'].' * '.$item['company_name'].' * '.$item['department'];
-
-        return $people;
+        return $data;
     }
 
     /**
@@ -39,6 +33,6 @@ class SelectPerson extends SelectBase
      */
     public function render()
     {
-        return view('components.select-base');
+        return view('components.select-person');
     }
 }

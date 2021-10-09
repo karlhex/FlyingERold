@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreatePlansTable extends Migration
@@ -28,6 +29,14 @@ class CreatePlansTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::table('select_options')->insert([
+            ['key' => 'planstatus','option' => 'waiting','value'=>'等待开始'],
+            ['key' => 'planstatus','option' => 'pending','value'=>'暂时停止'],
+            ['key' => 'planstatus','option' => 'working','value'=>'进行中'],
+            ['key' => 'planstatus','option' => 'finished','value'=>'已结束'],
+            ['key' => 'planstatus','option' => 'cancelled','value'=>'已取消'],
+        ]);
     }
 
     /**
@@ -38,5 +47,6 @@ class CreatePlansTable extends Migration
     public function down()
     {
         Schema::dropIfExists('plans');
+        DB::table('select_options')->where('key','planstatus')->delete();
     }
 }

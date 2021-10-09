@@ -19,6 +19,8 @@
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
 
+        <script type="text/javascript" src="{{ URL::asset('js/pdfjs/pdf.js') }}"></script>
+
         @bukStyles(true)
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -26,30 +28,23 @@
 
     </head>
     <body class="font-sans antialiased">
-        <x-jet-banner />
-
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
+        <div class="flex flex-col w-screen lg:flex-row font-semibold text-blue-900 text-base subpixel-antialiased">
+            @livewire('sidebar')
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                <div class="flex-col max-w-screen-2xl w-full bg-blue-50 py-4 lg:py-8 px-4 lg:px-6 xl:px-8 overflow-hidden">
+
+                    @livewire('topbar')
+
+                    {{ $slot }}
+
+                </div>
         </div>
 
-        @stack('modals')
 
-        @livewireScripts
-        @bukScripts(true)
+    @stack('modals')
+
+    @livewireScripts
+    @bukScripts(true)
 
     </body>
 

@@ -75,6 +75,8 @@ trait WithListItem {
 
     public function saveListItem()
     {
+        $this->validate();
+
         if ($this->li_record['id'])
             $this->DBMODEL::find($this->li_record['id'])->update($this->li_record);
         else

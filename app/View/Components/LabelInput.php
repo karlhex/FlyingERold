@@ -2,12 +2,10 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
+use App\View\Components\EditBase;
 
-class LabelInput extends Component
+class LabelInput extends EditBase
 {
-    public $label;
-    public $name;
     /**
      * Create a new component instance.
      *
@@ -15,8 +13,7 @@ class LabelInput extends Component
      */
     public function __construct($name, $label=null)
     {
-        $this->label = $label;
-        $this->name = $name;
+        parent::__construct($name,$label);
     }
 
     /**

@@ -5,10 +5,10 @@
         </x-slot>
 
         <x-slot name="content">
-            <x-date-picker name="project_experience.start_date" label='{{__("project_experience.StartDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.start_date' />
-            <x-date-picker name="project_experience.end_date" label='{{__("project_experience.EndDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.end_date' />
-            <x-label-input name="project_experience.project" label='{{__("project_experience.project")}}' class="mt-2 w-full" wire:model.defer='cur_record.project' />
-            <x-label-input name="project_experience.role" label='{{__("project_experience.role")}}' class="mt-2 w-full" wire:model.defer='cur_record.role' />
+            <x-date-picker name="cur_record.start_date" label='{{__("project_experience.StartDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.start_date' />
+            <x-date-picker name="cur_record.end_date" label='{{__("project_experience.EndDate") }}'  class="mt-1 w-full" format="YYYY-MM-DD" wire:model.defer='cur_record.end_date' />
+            <x-label-input name="cur_record.project" label='{{__("project_experience.project")}}' class="mt-2 w-full" wire:model.defer='cur_record.project' />
+            <x-label-input name="cur_record.role" label='{{__("project_experience.role")}}' class="mt-2 w-full" wire:model.defer='cur_record.role' />
         </x-slot>
 
         <x-slot name="footer">

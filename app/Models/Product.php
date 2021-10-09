@@ -20,4 +20,16 @@ class Product extends Model
     {
         return $this->belongsTo(Contract::class);
     }
+
+    public function product_info()
+    {
+        return $this->belongsTo(ProductInfo::class,'productinfo_id');
+    }
+
+    public function getProductNameAttribute()
+    {
+        $pinfo = $this->product_info;
+
+        return $pinfo->name;
+    }
 }

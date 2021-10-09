@@ -19,6 +19,7 @@ class CreateCertificatesTable extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employee_id');
             $table->unsignedTinyInteger('sequence');
             $table->string('cer_name');
             $table->date('cer_date');

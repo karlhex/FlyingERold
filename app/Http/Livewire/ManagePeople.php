@@ -4,13 +4,20 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Person;
+use App\Traits\WithEditSessions;
 use App\Traits\WithListItem;
 use Illuminate\Support\Facades\Log;
 
 class ManagePeople extends Component
 {
-
     use WithListItem;
+    use WithEditSessions;
+
+    protected $rules = [
+        'li_record.name' => 'required|min:2',
+        'li_record.phone1' => 'required|numeric',
+        'li_record.email' => 'required|email',
+    ];
 
     public function mount()
     {
@@ -36,6 +43,7 @@ class ManagePeople extends Component
             'phone' => null,
             'email' => null,
         ]);
+        $this->pushSessionPath('manage-people',__("ManagePeople"),route('frame',[ 'frame' =>'manage-people']) ,true);
     }
 
     public function render()

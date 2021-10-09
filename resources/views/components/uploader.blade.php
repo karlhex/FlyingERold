@@ -1,8 +1,7 @@
-<div>
-    @if ($label)
-        <x-jet-label for="{{$name}}" value="{{ $label }}" />
-    @endif
-
+<x-edit-base name="{{$name}}"
+             label="{{$label}}"
+             {{ $attributes  }}
+>
     <div
         x-data="{ isUploading: false, progress: 0 }"
         x-on:livewire-upload-start="isUploading = true"
@@ -20,4 +19,5 @@
                <progress max="100" x-bind:value="progress"></progress>
         </div>
     </div>
-</div>
+
+</x-edit-base>

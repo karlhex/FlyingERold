@@ -8,7 +8,7 @@ class AppListItems extends Component
 {
     public $items;
     public $headers;
-    public $filters;
+    public $filters=null;
     public $columns;
     public $url;
     public $urlcolumn;
@@ -19,11 +19,12 @@ class AppListItems extends Component
      *
      * @return void
      */
-    public function __construct($items,$headers,$filters,$columns,$url=null,$urlcolumn=null,$editable=null,$deletable=null)
+    public function __construct($items,$headers,$filters=null,$columns,$url=null,$urlcolumn=null,$editable=null,$deletable=null)
     {
         $this->items = $items;
         $this->headers = explode(' ',$headers);
-        $this->filters = explode(' ',$filters);
+        if ($filters)
+            $this->filters = explode(' ',$filters);
         $this->columns = explode(' ',$columns);
 
         $this->url = $url;

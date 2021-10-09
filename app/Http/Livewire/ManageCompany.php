@@ -3,13 +3,20 @@
 namespace App\Http\Livewire;
 
 use App\Models\Company;
+use App\Traits\WithEditSessions;
 use Livewire\Component;
 use App\Traits\WithListItem;
 
 class ManageCompany extends Component
 {
-
     use WithListItem;
+    use WithEditSessions;
+
+    protected $rules = [
+        'li_record.name' => 'required|min:4',
+        'li_record.address' => 'required|max:60',
+        'li_record.email' => 'required|email',
+    ];
 
     public function mount()
     {
@@ -33,6 +40,7 @@ class ManageCompany extends Component
         'phone'  => null,
         'site' => null,
         ]);
+        $this->pushSessionPath('manage-company',__("ManageCompany"),route('frame',[ 'frame' =>'manage-company']) ,true);
     }
 
     public function render()
